@@ -1,14 +1,17 @@
 <script lang="ts">
-  import '../global.postcss'
-  import { theme } from './store'
-  import { onMount } from 'svelte'
+import '../global.postcss'
+import { theme } from './store'
+import { onMount } from 'svelte'
+import ToggleTheme from '$lib/ToggleTheme.svelte';
 
-  onMount(() => {
+onMount(() => {
     if ($theme === 'dark') {
-      document.querySelector('html').classList.add('dark')
+        document.querySelector('html').classList.add('dark')
     }
-  })
+})
 </script>
+
+<ToggleTheme />
 
 <main>
   <slot />

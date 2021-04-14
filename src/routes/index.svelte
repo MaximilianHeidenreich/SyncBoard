@@ -1,7 +1,5 @@
 <script lang="ts">
 import { goto } from '$app/navigation';
-import { theme } from './store'
-import ToggleTheme from '$lib/ToggleTheme.svelte'
 
 // BINDINGS
 let input_roomId = "";
@@ -78,11 +76,6 @@ function joinRoom() {
         TODO: Exampel img
     </p>
 </section>
-
-
-<!--
-<ToggleTheme />
--->
 
 <!--
 <blockquote class="text-xl p-2 bg-gray-200 dark:bg-gray-800 mb-2 transition-colors duration-500">
