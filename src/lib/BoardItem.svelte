@@ -1,7 +1,7 @@
 <script lang="ts">
 import { createEventDispatcher } from 'svelte'
 import { get } from 'svelte/store';
-import { peerId } from '../routes/peerStore'
+import { myPeerId } from '../routes/peerStore'
 
 const dispatch = createEventDispatcher();
 
@@ -9,7 +9,7 @@ const dispatch = createEventDispatcher();
 export let name, completed, completedBy, clazz;
 
 let cssClass;
-$: cssClass = !completed ? "open" : completedBy === get(peerId) ? "completedSelf" : "completedOther";
+$: cssClass = !completed ? "open" : completedBy === get(myPeerId) ? "completedSelf" : "completedOther";
 
 // FUNC
 function completeItem() {

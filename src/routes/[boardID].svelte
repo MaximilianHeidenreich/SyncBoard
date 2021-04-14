@@ -3,70 +3,104 @@
  * @type {import('@sveltejs/kit').Load}
  */
 export async function load({ page }) {
-    return { props: { roomId: page.params.roomId }}
+    return { props: { boardID: page.params.boardID }}
 }
 </script>
 <script lang="ts">
-import { onMount } from 'svelte'
+import { onMount, onDestroy } from 'svelte'
 import { get } from 'svelte/store';
 import { items } from './itemStore'
 
 import Board from "$lib/Board.svelte"
 import BoardItem from "$lib/BoardItem.svelte"
-import { peerId } from './peerStore';
 import ToastGroup from '$lib/Toast/ToastGroup.svelte';
 import { addToast, toasts } from './toastStore';
 import { goto } from '$app/navigation';
+import { myPeerId } from './peerStore';
 
 // PROPS
-export let roomId = "new";
+export let boardID = "new";
 
 // BINDINGS
 let addItemInput = "";
 
-// PEER
-let peer = {};
+// P2P
+let peer: Peer;
 let connections = [];
+
+// UTIL
+const rand = ()=>Math.random().toString(36).substr(2);
+const token = (length)=>(rand()+rand()+rand()+rand()).substr(0,length);
+
 onMount(async () => {
     boardURL = window.location.origin;
-    peer = new Peer();
+    peer = new Peer(token(10));
+
     peer.on('error', (err) => {
+        addToast("error", err);
         console.error(err);
     })
-    peer.on('open', function(id) {
-        console.log('My peer ID is: ' + id);
 
-        if (roomId === "new") {
-            peerId.update(n => id);
+    peer.on('open', function(id) {
+        console.log('Your peer ID is: ' + id);
+        
+        myPeerId.update(n => id)
+
+        if (boardID === "new") {
             boardURL += `/${id}`
             history.replaceState(null, `SyncBoard - ${id}`, `/${id}`);
         }
         else {
-            let conn = peer.connect(roomId);
-            conn.on('open', handleConnection(conn));
+            console.log(`Connecting to: ${boardID}`);
+            let conn = peer.connect(boardID);
+            conn.on('open', () => {
+                handleConnection(conn)
+                boardURL += `/${boardID}`
+                history.replaceState(null, `SyncBoard - ${boardID}`, `/${boardID}`);
+                conn.send(JSON.stringify({ type: "reqItemsUpdate" }))
+            });
         }
 
 
     });
-    peer.on('connection', c => handleConnection(c));
+    peer.on('connection', c => {
+        handleConnection(c)
+    });
+    /*peer.on('open', () => {
+        // Send initial data if ther is any.
+        if (get(items).length > 0)
+            sendItemsUpdate()
+            //setTimeout(() => sendItemsUpdate(), 2000)
+    })*/
     
+});
+
+onDestroy(() => {
+    console.log("destroy");
+    
+    if (peer) {
+        peer.destroy()
+    }
 });
 
 function handleConnection(conn) {
     console.log("New connection!: " + conn);
     connections.push(conn);
     connected = true;
-    conn.on('data', d => handleDataRecv(JSON.parse(d)));
+    conn.on('data', d => handleDataRecv(JSON.parse(d)))
+    conn.on('close', () => {
+        addToast("info", "Remote peer has closed the connection!")
+    })
 }
 
 function handleDataRecv(data) {
     if (data.type === "itemsUpdate")
-        items.update(n => data.items);
+        items.update(n => data.items)
+    else if (data.type === "reqItemsUpdate")
+        sendItemsUpdate()
 }
 
 function sendItemsUpdate() {
-    console.log("cons: " + connections);
-    
     connections.forEach(conn => {
         conn.send(JSON.stringify({
             type: "itemsUpdate",
@@ -184,7 +218,7 @@ function copyTextToClipboard(text) {
     </p>
     <div class="flex content-between items-stretch space-x-3">
         <BoardItem clazz="w-full p-3" name="Click to complete" completed={false}/>
-        <BoardItem clazz="w-full p-3" name="Completed by you" completed={true} completedBy={$peerId}/>
+        <BoardItem clazz="w-full p-3" name="Completed by you" completed={true} completedBy={$myPeerId}/>
         <BoardItem clazz="w-full p-3" name="Completed by others" completed={true} completedBy={null}/>
     </div>
 </section>

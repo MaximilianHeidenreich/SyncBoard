@@ -1,4 +1,3 @@
 import { writable } from 'svelte/store'
-import type { Writable } from 'svelte/store'
 
-export const peerId = writable("");
+export const myPeerId = writable("");

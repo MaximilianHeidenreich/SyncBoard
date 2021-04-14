@@ -1,5 +1,7 @@
 <script lang="ts">
 import { goto } from '$app/navigation';
+import { items } from './itemStore';
+import { myPeerId } from './peerStore';
 
 // BINDINGS
 let input_roomId = "";
@@ -11,6 +13,10 @@ function newRoom() {
 function joinRoom() {
     goto(`/${input_roomId}`)
 }
+
+// RESET STORE
+myPeerId.update(n => "")
+items.update(n => [])
 
 </script>
 
@@ -67,13 +73,13 @@ function joinRoom() {
     </div>
 </section>
 
-<h2 class="text-center mt-24">What?</h2>
+<h3 class="text-center mt-24 mb-4">About the project</h3>
 <section class="text-center">
     <p>
         SyncBoard is a small tool, you can use to create shared, interactive task boards.
         Tasks on a board can be completed by either you, or any other connected peer.
         <br>
-        TODO: Exampel img
+        I created it just to get to know <a href="https://webrtc.org">WebRTC</a> and <a href="https://svelte.dev">Svelte</a>.
     </p>
 </section>
 
