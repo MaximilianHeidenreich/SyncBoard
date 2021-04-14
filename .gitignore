@@ -1,3 +1,4 @@
+.DS_store
 .svelte/
 .vercel_build_output/
 build/
