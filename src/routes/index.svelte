@@ -61,7 +61,7 @@ items.update(n => [])
                 <button on:click={joinRoom} class="center">Join existing room</button>
             </div>
         </div>
-        <input bind:value={input_roomId} placeholder="Room key" class="mt-4">
+        <input bind:value={input_roomId} placeholder="Board ID" class="mt-4">
     </div>
     <div class="flex w-4/12 justify-around">
         <h2 class="">OR</h2> <!-- self-center -->
