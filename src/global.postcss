@@ -3,9 +3,12 @@
 @tailwind utilities;
 
 /* purge start ignore */
+/* purge end ignore */
 body {
   @apply transition-colors duration-500;
-  @apply antialiased text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-900;
+  @apply antialiased;
+  @apply text-gray-600 dark:text-gray-100;
+  @apply bg-gray-100 dark:bg-gray-900;
   @apply leading-normal tracking-normal text-base font-normal break-words;
   @apply font-sans text-base lg:text-xl;
 }
@@ -19,29 +22,30 @@ footer {
 }
 
 a {
-  @apply text-green-600 dark:text-green-400;
+  @apply text-purple-600 dark:text-purple-400;
   @apply no-underline hover:underline focus:outline-none focus:underline;
 }
 
 button {
-    /*@apply py-1 px-4 my-2 rounded border border-gray-500;*/
+    /*@apply py-1 px-4 my-2 rounded;*/
     @apply cursor-pointer focus:outline-none;
-    @apply flex-shrink-0 bg-purple-600 text-white text-base font-semibold py-2 px-4 rounded-lg shadow-md;
+    @apply flex-shrink-0 bg-purple-600 text-white text-base font-semibold py-2 px-6 rounded-lg shadow-md;
     @apply focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200;
     @apply hover:bg-purple-700;
     @apply active:bg-purple-800;
     @apply disabled:opacity-50;
 }
 button.secondary {
-    @apply bg-gray-300 text-current;
+    @apply bg-gray-300 text-current text-yellow-400;
     @apply active:bg-gray-200;
+    @apply dark:bg-white text-black;
 }
 
 input {
     @apply flex-1 appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent
 }
 
-/* purge end ignore */
+
 
 h1 {
     @apply text-5xl font-extrabold;

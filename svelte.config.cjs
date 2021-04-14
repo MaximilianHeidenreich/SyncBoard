@@ -14,7 +14,7 @@ module.exports = {
     })
   ],
   kit: {
-    adapter: vercel(),
+    adapter: vercel(),//ssr(),
     target: '#svelte',
     vite: {
       ssr: {

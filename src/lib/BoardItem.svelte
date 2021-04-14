@@ -8,14 +8,8 @@ const dispatch = createEventDispatcher();
 // PROPS
 export let name, completed, completedBy, clazz;
 
-let background;
-$: background = !completed ? "bg-gray-300" : completedBy === get(peerId) ? "bg-purple-600" : "bg-red-500";
-let textColor;
-$: textColor = !completed ? "" : "text-white"; 
-let itemOpacity;
-$: itemOpacity = !completed ? "" : "opacity-60";
-let clickable;
-$: clickable = completed ? "cursor-not-allowed" : "cursor-pointer";
+let cssClass;
+$: cssClass = !completed ? "open" : completedBy === get(peerId) ? "completedSelf" : "completedOther";
 
 // FUNC
 function completeItem() {
@@ -26,8 +20,28 @@ function completeItem() {
 
 </script>
 
-<div on:click={completeItem} class="{clazz} {background} {itemOpacity} {clickable} rounded-lg flex p-6">
+<div on:click={completeItem} class="{clazz} {cssClass} rounded-lg flex p-6">
     <div class="self-center flex items-center justify-center w-full">
-        <h5 class="{textColor} text-center">{name}</h5>
+        <h5 class="text-center">{name}</h5>
     </div>
 </div>
+
+<style lang="postcss">
+.open {
+    @apply bg-gray-300 dark:bg-gray-300;
+    @apply text-current dark:text-black;
+    @apply cursor-pointer;
+}
+.completedSelf {
+    @apply bg-purple-600;
+    @apply text-white;
+    @apply opacity-60 dark:bg-opacity-90;
+    @apply cursor-not-allowed;
+}
+.completedOther {
+    @apply bg-red-500;
+    @apply text-white;
+    @apply opacity-60 dark:bg-opacity-90;
+    @apply cursor-not-allowed;
+}
+</style>

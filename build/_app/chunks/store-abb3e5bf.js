@@ -1,1 +1,0 @@
-import{H as e}from"./singletons-4c30898b.js";const t=function(t,o){const l="undefined"!=typeof localStorage?localStorage.getItem(t):null,n=e(o);return null!==l&&n.set(l),n.subscribe((e=>{"undefined"!=typeof localStorage&&localStorage.setItem(t,e)})),n}("theme","dark");export{t};
